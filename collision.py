@@ -13,4 +13,5 @@ def collision(player, obj):
             else:
                 player.rect.y += -obj.rect.h/2 - x_offset - player.rect.h/2
     return True
-    #figure out how to select to move x or y
+    #get distance between center of obj1 and sides of obj2
+    #the lowest distance is the amount that needs to be moved
