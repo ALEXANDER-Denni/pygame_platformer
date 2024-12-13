@@ -1,19 +1,16 @@
-def distance_between(point1, point2):
-    return (abs(((point2[0]-point1[0])**2)+((point2[1]-point1[1])**2))**(1/2),abs(point2[0]-point1[0]),abs(point2[1]-point1[1])) 
-def collision(obj1, obj2):
-    obj_1_top_left = (obj1.rect.x, obj1.rect.y)
-    obj_1_top_right = (obj1.rect.x+obj1.rect.w, obj1.rect.y)
-    obj_1_bottom_left = (obj1.rect.x, obj1.rect.y+obj1.rect.h)
-    obj_1_bottom_right = (obj1.rect.x+obj1.rect.w, obj1.rect.y+obj1.rect.h)
-    obj_2_top_left = (obj2.rect.x, obj2.rect.y)
-    obj_2_top_right = (obj2.rect.x+obj2.rect.w, obj2.rect.y)
-    obj_2_bottom_left = (obj2.rect.x, obj2.rect.y+obj2.rect.h)
-    obj_2_bottom_right = (obj2.rect.x+obj2.rect.w, obj2.rect.y+obj2.rect.h)
-    if (obj1.rect.x < obj2.rect.x + obj2.rect.w or obj1.rect.x + obj1.rect.w > obj2.rect.x) and (obj1.rect.y < obj2.rect.y + obj2.rect.h or obj1.rect.y + obj1.rect.h > obj2.rect.y):
-        distance_right_top = distance_between(obj_1_top_right,obj_1_bottom_left)
-        distance_left_top = distance_between(obj_1_top_left,obj_1_bottom_right)
-        distance_right_bottom = distance_between(obj_1_bottom_right,obj_1_top_left)
-        distance_right_bottom = distance_between(obj_1_bottom_right,obj_1_top_left)
-    #find shortest distance between two corners
-    #get longest side of overlapping area
-    #move in opposite direction of overlapping side
+def collision(player, obj):
+    if (player.rect.x < obj.rect.x + obj.rect.w and player.rect.x + player.rect.w > obj.rect.x) and (player.rect.y < obj.rect.y + obj.rect.h and player.rect.y + player.rect.h > obj.rect.y):
+        x_offset = (player.rect.x+player.rect.w/2)-(obj.rect.x+obj.rect.w/2)
+        y_offset = (player.rect.y+player.rect.h/2)-(obj.rect.y+obj.rect.h/2)
+        if abs(x_offset)<obj.rect.w/2+player.rect.w/2:
+            if x_offset>0:
+                player.rect.x += obj.rect.w/2 - x_offset + player.rect.w/2
+            else:
+                player.rect.x += -obj.rect.w/2 - x_offset - player.rect.w/2
+        if abs(y_offset)<obj.rect.h/2:
+            if y_offset>0:
+                player.rect.y += obj.rect.h/2 - x_offset + player.rect.h/2
+            else:
+                player.rect.y += -obj.rect.h/2 - x_offset - player.rect.h/2
+    return True
+    #figure out how to select to move x or y

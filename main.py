@@ -1,6 +1,8 @@
 import time
 import pygame
 import os
+
+import collision
 import player
 
 os.environ['SDL_AUDIODRIVER'] = 'directx'
@@ -17,15 +19,19 @@ FPS = 60
 clock = pygame.time.Clock()
 
 
-player_object = player.player(600, 100, 10, 10)
+player_object = player.player(0, 100, 10, 10)
 
 move_left = False
 move_right = False
+jump = False
 
 
 def draw_background():
     screen.fill((0, 255, 0))
 
+class TEMP:
+    def __init__(self,x,y,w,h):
+        self.rect = pygame.Rect(x,y,w,h)
 
 run = True
 while run:
@@ -40,12 +46,19 @@ while run:
                 move_left = True
             if event.key == pygame.K_d:
                 move_right = True
+            if event.key == pygame.K_w:
+                jump = True
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 move_left = False
             if event.key == pygame.K_d:
                 move_right = False
-    player_object.move(move_left, move_right, False, False)
+            if event.key == pygame.K_w:
+                jump = False
+    
+    pygame.draw.rect(screen, (0, 0, 0), TEMP(60,10,100,100))
+    player_object.move(move_left, move_right, jump, False)
+    collision.collision(player_object, TEMP(60,10,100,100))
     player_object.draw(screen)
-    print(player_object.rect.y)
+    
     pygame.display.update()

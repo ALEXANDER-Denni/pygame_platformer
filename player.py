@@ -35,10 +35,10 @@ class player:
         if left:
             x_v -= self.accel
         if up and not self.in_air:
-            y_v = JUMP_FORCE
+            y_v = -JUMP_FORCE
             self.in_air = True
         if self.in_air:
-            self.y_v += GRAVITY
+            y_v += GRAVITY
             if down:
                 y_v += self.accel
         else:
@@ -63,4 +63,4 @@ class player:
         self.rect.y += self.y_velocity
 
     def draw(self, screen,):
-        pygame.draw.rect(screen, (0, 0, 0), self.rect)
+        pygame.draw.rect(screen, (0, 0, 255), self.rect)
