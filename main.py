@@ -3,7 +3,8 @@ import os
 
 import collision
 import player
-import wall
+import platforms
+import moving_platform
 
 os.environ['SDL_AUDIODRIVER'] = 'directx'
 
@@ -31,13 +32,15 @@ shoot = False
 def draw_background():
     screen.fill((0, 255, 0))
 
-walls = pygame.sprite.Group()
+level_platforms = pygame.sprite.Group()
 
-walls.add(wall.wall(50, 200, 500, 100, screen))
-walls.add(wall.wall(200, 180, 100, 20, screen))
+level_platforms.add(platforms.platform(50, 200, 500, 100, screen))
+level_platforms.add(platforms.platform(200, 180, 100, 20, screen))
 
 bullets = pygame.sprite.Group()
 
+moving_platform_1 = moving_platform.moving_platform(0, 180, 20, 5, SCREEN_WIDTH, 10*60, screen)
+level_platforms.add(moving_platform_1)
 run = True
 while run:
     draw_background()
@@ -69,12 +72,13 @@ while run:
             if event.key == pygame.K_SPACE:
                 shoot = False
     
-    walls.update()
+    level_platforms.update()
+    moving_platform_1.update()
     player_object.move(move_left, move_right, jump, move_down)
     if shoot:
         player_object.shoot(bullets)
     bullets.update()
-    collide = collision.platform_collisions(player_object, walls)# return (X collision, Y collision)
+    collide = collision.platform_collisions(player_object, level_platforms)# return (X collision, Y collision)
     if collide[0]:
         player_object.x_velocity = 0
     if collide[1]:
@@ -84,4 +88,4 @@ while run:
     player_object.draw()
     pygame.display.update()  
 
-#add enemies, add more platforms, add moving platforms, add lasers, add switches and doors, add level builder script
+#add collision for moving platforms, add lasers, add switches and doors, add enemies, add images, add level builder script
