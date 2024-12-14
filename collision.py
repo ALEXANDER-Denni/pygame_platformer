@@ -1,6 +1,6 @@
 def platform_collisions(player, platforms):
     res = []
-    for platform in platforms:
+    for platform in platforms.sprites():
         res.append(player_platform_collison(player,platform))
     out = [False, False] #X collide, Y collide
     if "X" in res:
