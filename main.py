@@ -20,7 +20,7 @@ FPS = 60
 clock = pygame.time.Clock()
 
 
-player_object = player.player(100, 100, 10, 20, screen)
+player_object = player.player(500, 100, 10, 20, screen)
 
 move_left = False
 move_right = False
@@ -35,11 +35,11 @@ def draw_background():
 level_platforms = pygame.sprite.Group()
 
 level_platforms.add(platforms.platform(50, 200, 500, 100, screen))
-level_platforms.add(platforms.platform(200, 180, 100, 20, screen))
+level_platforms.add(platforms.platform(200, 100, 100, 10, screen))
 
 bullets = pygame.sprite.Group()
 
-moving_platform_1 = moving_platform.moving_platform(0, 180, 20, 5, SCREEN_WIDTH, 10*60, screen)
+moving_platform_1 = moving_platform.moving_platform(40, 180, 60, 5, SCREEN_WIDTH, 5*60, screen)
 level_platforms.add(moving_platform_1)
 run = True
 while run:
@@ -74,18 +74,13 @@ while run:
     
     level_platforms.update()
     moving_platform_1.update()
-    player_object.move(move_left, move_right, jump, move_down)
+    player_object.move(move_left, move_right, jump, move_down, level_platforms)
     if shoot:
         player_object.shoot(bullets)
     bullets.update()
-    collide = collision.platform_collisions(player_object, level_platforms)# return (X collision, Y collision)
-    if collide[0]:
-        player_object.x_velocity = 0
-    if collide[1]:
-        player_object.in_air = False
-    else:
-        player_object.in_air = True
     player_object.draw()
     pygame.display.update()  
 
-#add collision for moving platforms, add lasers, add switches and doors, add enemies, add images, add level builder script
+
+#add negative direction to moving platform collision
+#add lasers, add switches and doors, add enemies, add images, add level builder script

@@ -1,6 +1,7 @@
 import pygame
 import os
 
+import collision
 import bullet
 
 START_HEALTH = 100
@@ -46,19 +47,20 @@ class player(pygame.sprite.Sprite):
         self.reloading = False
         
 
-    def move(self, left, right, up, down):
+    def move(self, left, right, up, down, platforms):
         self.reload() # add to update script in future
         x_v = 0
         y_v = 0
 
         if right:
-            
             x_v += self.accel
         if left:
             
             x_v -= self.accel
         if down:
             y_v += self.accel
+        """if up: use for flying
+            y_v -=self.accel"""
         if up:
             if not self.in_air:
                 y_v = -JUMP_FORCE
@@ -92,7 +94,18 @@ class player(pygame.sprite.Sprite):
             self.y_velocity = self.max_speed
         elif self.y_velocity < -self.max_speed:
             self.y_velocity = -self.max_speed
-
+        max_moves = collision.platform_collisions(self, platforms)
+        if abs(max_moves[0]) < abs(self.x_velocity):
+            self.x_velocity = max_moves[0]
+            self.rect.x += self.x_velocity
+            self.x_velocity = 0
+        if abs(max_moves[1]) < abs(self.y_velocity):
+            if self.y_velocity <= 0:
+                self.in_air = False
+            self.y_velocity = max_moves[1]
+            self.rect.y += self.y_velocity
+            self.y_velocity = 0
+        self.in_air = not max_moves[2]
         self.rect.x += self.x_velocity
         self.rect.y += self.y_velocity
 
@@ -111,5 +124,9 @@ class player(pygame.sprite.Sprite):
             self.ammo = STARTER_AMMO
             self.reloading = False
 
+    def push(self, amount):
+        self.rect.x += amount
+
+        
     def draw(self):
         self.screen.blit(pygame.transform.flip(self.image, self.direction==1, False), self.rect)
