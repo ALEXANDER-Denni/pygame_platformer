@@ -1,4 +1,3 @@
-import time
 import pygame
 import os
 
@@ -19,10 +18,12 @@ FPS = 60
 clock = pygame.time.Clock()
 
 
-player_object = player.player(0, 100, 10, 10)
+player_object = player.player(100, 100, 10, 20)
 
 move_left = False
 move_right = False
+move_up = False
+move_down = False
 jump = False
 
 
@@ -48,6 +49,8 @@ while run:
                 move_right = True
             if event.key == pygame.K_w:
                 jump = True
+            if event.key == pygame.K_s:
+                move_down = True
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 move_left = False
@@ -55,10 +58,21 @@ while run:
                 move_right = False
             if event.key == pygame.K_w:
                 jump = False
+            if event.key == pygame.K_s:
+                move_down = False
     
-    pygame.draw.rect(screen, (0, 0, 0), TEMP(60,10,100,100))
-    player_object.move(move_left, move_right, jump, False)
-    collision.collision(player_object, TEMP(60,10,100,100))
+    pygame.draw.rect(screen, (0, 0, 0), TEMP(50,200,500,100))
+    pygame.draw.rect(screen, (0, 0, 0), TEMP(200, 180, 100, 20))
+    player_object.move(move_left, move_right, jump, move_down)
+    collide = collision.platform_collisions(player_object, [TEMP(50,200,500,100), TEMP(200, 180, 100, 20)])# return (X collision, Y collision)
+    if collide[0]:
+        player_object.x_velocity = 0
+    if collide[1]:
+        player_object.in_air = False
+    else:
+        player_object.in_air = True
     player_object.draw(screen)
     
     pygame.display.update()
+
+#add bullets, add enemies, add more platforms, add moving platforms, add lasers, add switches and doors, add level builder script

@@ -1,4 +1,3 @@
-import time
 import pygame
 import os
 
@@ -14,7 +13,7 @@ FRICTION = 1
 GRAVITY = 1
 SPEED = 10
 JUMP_FORCE = 100
-
+DOUBLE_JUMP_DELAY = 110
 
 class player:
     def __init__(self, x, y, w, h):
@@ -23,25 +22,44 @@ class player:
         self.y_velocity = 0
         self.accel = ACCELERATION
         self.max_speed = SPEED
+
+        self.in_air = False
+        self.double_jump = False
+        self.jumpTime = 0
+
         self.health = START_HEALTH
         self.ammo = STARTER_AMMO
-        self.in_air = False
+        
+
     def move(self, left, right, up, down):
         x_v = 0
         y_v = 0
 
         if right:
+            if self.x_velocity < 0 and not right:
+                x_v+=self.x_velocity
             x_v += self.accel
         if left:
+            if self.x_velocity > 0 and not left:
+                x_v+=self.x_velocity
             x_v -= self.accel
-        if up and not self.in_air:
-            y_v = -JUMP_FORCE
+        if down:
+            y_v += self.accel
+        if up:
+            if not self.in_air:
+                y_v = -JUMP_FORCE
+                self.double_jump = True
+                self.jumpTime = pygame.time.get_ticks()
+            elif self.double_jump and pygame.time.get_ticks() - self.jumpTime > DOUBLE_JUMP_DELAY:
+                y_v = -JUMP_FORCE
+                self.double_jump = False
             self.in_air = True
         if self.in_air:
             y_v += GRAVITY
             if down:
                 y_v += self.accel
         else:
+            self.y_velocity = 0
             if not right and not left:
                 if self.x_velocity > 0:
                     x_v -= FRICTION
