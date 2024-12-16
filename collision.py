@@ -2,7 +2,7 @@ def platform_collisions(player, platforms):
     x_moves = []
     y_moves = []
     for platform in platforms.sprites():
-        colliding = player_platform_collison(player,platform)
+        colliding = player_platform_collision(player,platform)
         if colliding != False:
             x_moves.append(colliding[0])
             y_moves.append(colliding[1])
@@ -25,7 +25,13 @@ def moving_platform_push(player, platform):
             if player.rect.y < platform.rect.y + platform.rect.h and player.rect.y + player.rect.h - 1 > platform.rect.y:
                 return True
             if player.rect.y + player.rect.h + 1 > platform.rect.y and player.rect.y < platform.rect.y + platform.rect.h:
-                player.push(platform.speed*2) 
+                player.push(platform.speed*2)
+    if platform.direction == -1:
+        if player.rect.x + player.x_velocity < platform.rect.x + platform.rect.w + platform.speed and player.rect.x + player.rect.w + player.x_velocity > platform.rect.x + platform.speed:
+            if player.rect.y < platform.rect.y + platform.rect.h and player.rect.y + player.rect.h - 1 > platform.rect.y:
+                return True
+            if player.rect.y + player.rect.h + 1 > platform.rect.y and player.rect.y < platform.rect.y + platform.rect.h:
+                player.push(-platform.speed*2)
 
 
 def ground_below(player, platforms):
@@ -35,12 +41,15 @@ def ground_below(player, platforms):
     return False
 
 
-def player_platform_collison(player, obj):
+def player_platform_collision(player, obj):
     x_move = 0
     y_move = 0
-    if obj.__class__.__name__ == "moving_platform" and (player.x_velocity <= 0) == (obj.direction == 1):
+    if obj.__class__.__name__ == "moving_platform":
         if moving_platform_push(player, obj):
-            player.push(obj.speed + (obj.rect.x + obj.rect.w) - player.rect.x)
+            if obj.direction == 1 and player.x_velocity <= 0:
+                player.push(obj.speed + (obj.rect.x + obj.rect.w) - player.rect.x)
+            elif player.x_velocity >= 0:
+                player.push(-(player.rect.x + player.rect.w - obj.rect.x - obj.speed))
             player.x_velocity = 0
     elif (player.rect.x + player.x_velocity< obj.rect.x + obj.rect.w and player.rect.x + player.x_velocity+ player.rect.w > obj.rect.x) and (player.rect.y + player.y_velocity < obj.rect.y + obj.rect.h and player.rect.y + player.y_velocity + player.rect.h > obj.rect.y):
         if player.x_velocity > 0:
@@ -53,18 +62,3 @@ def player_platform_collison(player, obj):
             y_move = obj.rect.y - (player.rect.y + player.rect.h)
         return (x_move, y_move)
     return (player.x_velocity, player.y_velocity)
-"""x_offset = (player.rect.x+player.rect.w/2)-(obj.rect.x+obj.rect.w/2)
-        y_offset = (player.rect.y+player.rect.h/2)-(obj.rect.y+obj.rect.h/2)
-        if abs(x_offset)<obj.rect.w/2+player.rect.w/2 and abs(y_offset)*obj.rect.w/2<abs(x_offset)*obj.rect.h/2:
-            if x_offset>0:
-                player.rect.x = obj.rect.x + obj.rect.w
-            else:
-                player.rect.x = obj.rect.x - player.rect.w
-            return "X"
-        elif abs(y_offset)<obj.rect.h/2+player.rect.h/2 and abs(y_offset)*obj.rect.w/2>abs(x_offset)*obj.rect.h/2:
-            if y_offset>0:
-                player.rect.y = obj.rect.y + obj.rect.h
-            else:
-                player.rect.y = obj.rect.y - player.rect.h
-            return "Y"
-    return False"""

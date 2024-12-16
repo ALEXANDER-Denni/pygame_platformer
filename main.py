@@ -82,5 +82,4 @@ while run:
     pygame.display.update()  
 
 
-#add negative direction to moving platform collision
 #add lasers, add switches and doors, add enemies, add images, add level builder script
