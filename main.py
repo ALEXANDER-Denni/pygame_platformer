@@ -39,6 +39,8 @@ level_platforms.add(platforms.platform(50, 200, 500, 100, screen))
 level_platforms.add(platforms.platform(200, 100, 100, 10, screen))
 
 bullets = pygame.sprite.Group()
+lasers = pygame.sprite.Group()
+lasers.add(laser.laser(100, 100, 0, 1, screen))
 
 moving_platform_1 = moving_platform.moving_platform(40, 180, 60, 5, SCREEN_WIDTH, 5*60, screen)
 level_platforms.add(moving_platform_1)
@@ -72,9 +74,10 @@ while run:
                 move_down = False
             if event.key == pygame.K_SPACE:
                 shoot = False
-    
+
     level_platforms.update()
     moving_platform_1.update()
+    lasers.update()
     player_object.move(move_left, move_right, jump, move_down, level_platforms)
     if shoot:
         player_object.shoot(bullets)
@@ -83,4 +86,4 @@ while run:
     pygame.display.update()  
 
 
-#add laser group, add spikes, add switches and doors, add enemies, add images, add level builder script
+#add laser group, add colision for lasers and bullets, add spikes, add switches and doors, add enemies, add images, add level builder script

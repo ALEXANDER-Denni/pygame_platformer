@@ -45,17 +45,15 @@ class player(pygame.sprite.Sprite):
         self.fire_time = 0
         self.time_of_reload = 0
         self.reloading = False
-        
 
     def move(self, left, right, up, down, platforms):
         self.reload() # add to update script in future
         x_v = 0
         y_v = 0
 
-        if right:
+        if right and not self.in_air:
             x_v += self.accel
-        if left:
-            
+        if left and not self.in_air:
             x_v -= self.accel
         if down:
             y_v += self.accel
