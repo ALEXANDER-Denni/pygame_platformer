@@ -5,6 +5,7 @@ import collision
 import player
 import platforms
 import moving_platform
+import laser
 
 os.environ['SDL_AUDIODRIVER'] = 'directx'
 
@@ -82,4 +83,4 @@ while run:
     pygame.display.update()  
 
 
-#add lasers, add switches and doors, add enemies, add images, add level builder script
+#add laser group, add spikes, add switches and doors, add enemies, add images, add level builder script
