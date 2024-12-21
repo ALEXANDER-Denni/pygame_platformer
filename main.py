@@ -6,6 +6,7 @@ import player
 import platforms
 import moving_platform
 import laser
+import spikes
 
 os.environ['SDL_AUDIODRIVER'] = 'directx'
 
@@ -44,6 +45,9 @@ lasers.add(laser.laser(100, 100, 0, 1, screen))
 
 moving_platform_1 = moving_platform.moving_platform(40, 180, 60, 5, SCREEN_WIDTH, 5*60, screen)
 level_platforms.add(moving_platform_1)
+
+spike = spikes.spike(200, 500, 200, 10, 1, screen)#delete
+
 run = True
 while run:
     draw_background()
@@ -84,7 +88,8 @@ while run:
     collision.player_damage_collisions(player_object, player_bullets, lasers) # replace player_bullets with enemy_bullets once enemies are added
     player_bullets.update()
     player_object.draw()
+    spike.draw() # delete
     pygame.display.update()  
 
 
-#add spikes, add invincibility frames, add switches and doors, add enemies, add images, add level builder script
+#add spike group, comment code, add invincibility frames, add switches and doors, add enemies, add images, add level builder script
