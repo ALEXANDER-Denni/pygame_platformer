@@ -122,6 +122,10 @@ class player(pygame.sprite.Sprite):
             self.ammo = STARTER_AMMO
             self.reloading = False
 
+    def damage(self, damage):
+        self.health -= damage
+        print(self.health)
+
     def push(self, amount):
         self.rect.x += amount
 

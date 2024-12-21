@@ -1,3 +1,4 @@
+import pygame
 def platform_collisions(player, platforms):
     x_moves = []
     y_moves = []
@@ -62,3 +63,18 @@ def player_platform_collision(player, obj):
             y_move = obj.rect.y - (player.rect.y + player.rect.h)
         return (x_move, y_move)
     return (player.x_velocity, player.y_velocity)
+
+def player_damage_collisions(player, bullets, lasers, spikes=pygame.sprite.Group(), enemies=pygame.sprite.Group()):
+    for bullet in bullets.sprites():
+        player_bullet_collision(player, bullet)
+    for laser in lasers.sprites():
+        player_damage_laser(player, laser)
+
+def player_bullet_collision(player, obj):
+    if player.rect.x < obj.rect.x + obj.rect.w and player.rect.x + player.rect.w > obj.rect.x and player.rect.y < obj.rect.y + obj.rect.h and player.rect.y + player.rect.h > obj.rect.y:
+        player.damage(obj.damage)
+        obj.groups()[0].remove(obj)
+
+def player_damage_laser(player, obj):
+    if player.rect.x < obj.laser_rect.x + obj.laser_rect.w and player.rect.x + player.rect.w > obj.laser_rect.x and player.rect.y < obj.laser_rect.y + obj.laser_rect.h and player.rect.y + player.rect.h > obj.laser_rect.y:
+        player.damage(obj.damage)

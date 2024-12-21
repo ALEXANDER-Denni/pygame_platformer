@@ -4,7 +4,7 @@ import os
 LASER_WIDTH = 10
 BASE_WIDTH = 20
 BASE_HEIGHT = 10
-
+DAMAGE = 10
 
 class laser(pygame.sprite.Sprite):
     def __init__(self, l, x, y, rotation, screen):  # rotation 1-4(N,E,S,W)
@@ -25,6 +25,7 @@ class laser(pygame.sprite.Sprite):
         self.laser_rect.x = x - LASER_WIDTH/2 + BASE_WIDTH/2
         self.laser_rect.y = y
 
+        self.damage = DAMAGE
     def draw(self):
         self.screen.blit(self.surface, self.laser_rect)
         self.screen.blit(self.base, self.base_rect)
