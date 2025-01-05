@@ -46,7 +46,9 @@ lasers.add(laser.laser(100, 100, 0, 1, screen))
 moving_platform_1 = moving_platform.moving_platform(40, 180, 60, 5, SCREEN_WIDTH, 5*60, screen)
 level_platforms.add(moving_platform_1)
 
-spike = spikes.spike(200, 500, 200, 10, 1, screen)#delete
+
+spike_group = pygame.sprite.Group()
+spike_group.add(spikes.spike(200, 170, 200, 10, 1, screen))
 
 run = True
 while run:
@@ -85,11 +87,11 @@ while run:
     player_object.move(move_left, move_right, jump, move_down, level_platforms)
     if shoot:
         player_object.shoot(player_bullets)
-    collision.player_damage_collisions(player_object, player_bullets, lasers) # replace player_bullets with enemy_bullets once enemies are added
+    collision.player_damage_collisions(player_object, player_bullets, lasers, spike_group) # replace player_bullets with enemy_bullets once enemies are added
     player_bullets.update()
     player_object.draw()
-    spike.draw() # delete
+    spike_group.update()
     pygame.display.update()  
 
 
-#add spike group, comment code, add invincibility frames, add switches and doors, add enemies, add images, add level builder script
+#comment code, add invincibility frames, add switches and doors, add enemies, add images, add level builder script

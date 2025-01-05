@@ -3,7 +3,7 @@ import os
 
 DAMAGE = 10
 
-class spike:
+class spike(pygame.sprite.Sprite):
     def __init__(self, x, y, l, height, rotation, screen): # rotation 1-4(N,E,S,W)
         pygame.sprite.Sprite.__init__(self)
         self.screen = screen
@@ -19,7 +19,7 @@ class spike:
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-
+        self.image.fill((0,120,0))
         self.damage = DAMAGE
     def draw(self):
         self.screen.blit(pygame.transform.rotate(self.image, (self.rotation-1)*90), self.rect)
